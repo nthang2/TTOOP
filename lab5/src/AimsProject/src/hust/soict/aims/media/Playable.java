@@ -1,5 +1,7 @@
-package AimsProject.src.hust.dsai.aims.media;
+package AimsProject.src.hust.soict.aims.media;
+
+import AimsProject.src.hust.soict.aims.exception.PlayerException;
 
 public interface Playable {
-	public void play();
+	public void play() throws PlayerException;
 }

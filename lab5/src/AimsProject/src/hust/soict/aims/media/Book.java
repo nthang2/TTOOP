@@ -1,5 +1,6 @@
-package AimsProject.src.hust.dsai.aims.media;
+package AimsProject.src.hust.soict.aims.media;
 
+import AimsProject.src.hust.soict.aims.exception.*;
 import java.util.*;
 
 public class Book extends Media {
@@ -31,12 +32,49 @@ public class Book extends Media {
 	}
 	
 	
-	public void addAuthor(String authorName) {
-		authors.add(authorName);
+	public void addAuthor(String authorName) throws DupplicatedItemException {
+		for (String name: this.authors) {
+			if (name.toLowerCase().equals(authorName.toLowerCase())) {
+				throw new DupplicatedItemException(name + " is already in the list of authors.");
+			}
+		}
+		this.authors.add(authorName);
+		System.out.println(authorName + " has been added to the " + this.getTitle() + " list of authors.");
 	}
 	
-	public void removeAuthor(String authorName) {
-		authors.remove(authorName);
+	
+	public void removeAuthor(String authorName) throws NonExistingItemException {
+		for (String name: this.authors) {
+			if (name.toLowerCase().equals(authorName.toLowerCase())) {
+				this.authors.remove(name);
+				System.out.println(name + " has been removed from the " + this.getTitle() + " list of authors.");
+				return;
+			}
+		}
+		throw new NonExistingItemException(authorName + " is not in the list of authors.");
 	}
 	
+	public String getDetails() {
+		StringBuffer authorsList = new StringBuffer();
+		if (this.authors.size() >= 1) {
+			authorsList.append(this.authors.get(0));
+			for (int i = 1; i < this.authors.size(); i++) {
+				authorsList.append(", " + this.authors.get(i));
+			}
+		}
+		return ("Product ID: " + String.valueOf(this.getId())
+		+ "\n" + "\t" + "Title: " + this.getTitle()
+		+ "\n" + "\t" + "Category: " + this.getCategory()
+		+ "\n" + "\t" + "Authors: " + authorsList
+		+ "\n" + "\t" + "Content Length: " + String.valueOf(this.getContentLength()) + " pages"
+		+ "\n" + "\t" + "Price: $" + String.valueOf(this.getCost()));
+	}
+	
+	public int getContentLength() {
+		return contentLength;
+	}
+	
+	public String getType() {
+		return "Book";
+	}
 }

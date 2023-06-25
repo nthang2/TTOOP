@@ -1,33 +1,31 @@
 package AimsProject.src.hust.soict.aims.store;
+import java.util.ArrayList;
+import java.util.List;
 
-import java.util.*;
-
-import AimsProject.src.hust.dsai.aims.media.Media;
+import AimsProject.src.hust.soict.aims.exception.*;
+import AimsProject.src.hust.soict.aims.media.*;
+import java.time.LocalDate;
 
 public class Store {
-    ArrayList<Media> itemsInStore = new ArrayList<Media>();
+	private List<Media> itemsInStore = new ArrayList<Media>();
 
-    public void addMedia(Media media) {
-        itemsInStore.add(media);
-        System.out.println("Added " + media.getTitle() + " to the store.");
-    }
-
-    public void removeMedia(Media media) {
-        if (itemsInStore.contains(media)){
-            itemsInStore.remove(media);
-            System.out.println("Removed " + media.getTitle() + " from the store.");
-        }
-        else {
-        	System.out.println("Item not found in the store.");
-        }
-    }
-    
-    public void listItems() {
-        System.out.println("Items in store:");
-        for (int i = 0; i < itemsInStore.size(); i++) {
-            System.out.println((i+1) + ". " + itemsInStore.get(i).getTitle());
-        }
-    }
+	public void addMedia(Media medium) throws DupplicatedItemException {
+		if (this.itemsInStore.contains(medium) || medium.getTitle() == null) {
+			throw new DupplicatedItemException();
+		} else {
+			medium.setDateAdded(LocalDate.now());
+			this.itemsInStore.add(medium);
+			System.out.println(medium.getTitle() + " has been added to the store.");
+		}
+	}
+	
+	public void removeMedia(Media medium) throws NonExistingItemException {
+		if (this.itemsInStore.remove(medium)) {
+			System.out.println(medium.getTitle() + " has been removed from the store.");
+		} else {
+			throw new NonExistingItemException(medium.getTitle() + " is not available at the store.");
+		}
+	}
 	
 	public Media searchMedia(String title) {
 		for (Media medium: this.itemsInStore) {
@@ -38,11 +36,17 @@ public class Store {
 		return null;
 	}
 	
-	public ArrayList<Media> getItemsInStore() {
-		return (ArrayList<Media>) this.itemsInStore;
+	public void print() {
+		System.out.println("\n");
+		System.out.println("*************AVAILABLE MEDIA IN STORE**************");
+		for (int i = 0; i < itemsInStore.size(); i++) {
+			System.out.println(Integer.toString(i+1) + "." + "\t" + this.itemsInStore.get(i).getTitle() + "\t-\t" + this.itemsInStore.get(i).getType());
+		}
+		System.out.println("***************************************************");
+		System.out.println("\n");
 	}
 	
-	public int getSize() {
-		return itemsInStore.size();
+	public ArrayList<Media> getItemsInStore() {
+		return (ArrayList<Media>) this.itemsInStore;
 	}
 }

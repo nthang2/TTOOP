@@ -1,6 +1,6 @@
-package AimsProject.src.hust.dsai.aims.media;
+package AimsProject.src.hust.soict.aims.media;
 
-public class Disc extends Media {
+public abstract class Disc extends Media implements Playable{
 	private String director;
     private int length;
     
@@ -46,4 +46,6 @@ public class Disc extends Media {
 	public void setLength(int length) {
 		this.length = length;
 	}
+
+	
 }
